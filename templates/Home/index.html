@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home{% endblock title %}
+{% block active1 %}active{% endblock active1 %}
+{% block body %}
+<section id="section__one">
+    <h4>Welcome</h4>
+    <h1>We cooked your desired</h1>
+    <h1>Pizza Recipe</h1>
+    <div class="btns">
+        <a href="#">order now</a>
+        <a href="#">view menu</a>
+    </div>
+</section>
+<section id="section__two">
+    <div class="outter__box__one box">
+        <div class="inner__box__one">
+            <div class="icon"><i class="fas fa-phone-alt"></i></div>
+            <div class="text">
+                <h3>000 (123) 456 7890</h3>
+                <p>A small river named Duden flows</p>
+            </div>
+        </div>
+        <div class="inner__box__one">
+            <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="text">
+                <h3>198 West 21th Street</h3>
+                <p>Suite 721 New York NY 10016</p>
+            </div>
+        </div>
+        <div class="inner__box__one">
+            <div class="icon"><i class="far fa-clock"></i></div>
+            <div class="text">
+                <h3>Open Monday-Friday</h3>
+                <p>8:00am - 9:00pm</p>
+            </div>
+        </div>
+    </div>
+    <div class="outter__box__two box">
+        <div class="inner__box__two">
+            <div class="social__icons">
+                <a href="#">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock body %}
