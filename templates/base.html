@@ -39,6 +39,7 @@
             position: fixed;
             top: 0;
             left: 0;
+            z-index: 9999;
         }
         .header #logo a img{
             width: 120px;
@@ -161,6 +162,44 @@
             padding: 30px;
             font-size: 22px;
             color: #000;
+        }
+        #section__three{
+            width: 100%;
+            min-height: 40vh;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            color: #fff;
+        }
+        #section__three .left__image{
+            width: 50%;
+        }
+        #section__three .left__image img{
+            height: 40vh;
+            width: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+        #section__three .right__text{
+            width: 50%;
+            padding: 100px;
+        }
+        #section__three .right__text h1{
+            margin: 20px 0;
+            font-family: 'Josefin Sans';
+            font-size: 32px;
+            font-weight: 400;
+        }
+        #section__three .right__text h1 span{
+            color: rgb(255, 187, 0);
+            font-family: 'Josefin Sans';
+            font-weight: 400;
+        }
+        #section__three .right__text p{
+            color: rgb(255, 211, 130);
+        }
+        #section__three .right__text{
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('./static/images/bg.webp');
         }
     </style>
 </head>
