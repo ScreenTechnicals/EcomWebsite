@@ -26,6 +26,7 @@
             background-position: center;
             background-size: cover;
             background-attachment: fixed;
+            min-height: 100vh;
         }
         a{
             text-decoration: none;
@@ -284,24 +285,98 @@
             color: #000;
             font-weight: bold;
         }
+        #orders{
+            width: 100%;
+            min-height: 100vh;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #fff;
+            padding: 170px 30px;
+        }
+        #orders h1{
+            font-family: 'Josefin Sans';
+            font-size: 40px;
+            color: rgb(255, 187, 0);
+        }
+        #orders .table__orders__container{
+            width: 100%;
+        }
+        #orders .table__orders__container .table__orders {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px;
+        }
+        #orders .table__orders__container .table__orders table{
+            border: 2px solid #fff;
+            border-left: none;
+            border-right: none;
+            border-collapse: collapse;
+        }
+        #orders .table__orders__container .table__orders table tr > th, td{
+            border: 2px solid rgb(60, 255, 0);
+            border-left: none;
+            border-right: none;
+            padding: 10px 30px;
+        }
+        #orders .table__orders__container .table__orders table tr > th{
+            color: rgb(255, 211, 130);
+        }
+        #orders .table__orders__container .table__orders table tr > td{
+            font-weight: normal;
+        }
+        .menu{
+            padding: 100px 30px;
+            background: rgb(31, 31, 31);
+        }
+        .order__link {
+            position: relative;
+        }
+        .order__link .order__num{
+            color: rgb(255, 255, 255);
+            position: absolute;
+            right: -20px;
+            top: -15px;
+            background: red;
+            border-radius: 50%;
+            padding: 5px 10px;
+            
+        }
+        #orders h4{
+            text-align: center;
+            color: #fff;
+            font-family: "Nothing You Could Do",cursive;
+            font-size: 40px;
+        }
+        #orders h4 > a{
+            text-align: center;
+            color: rgb(60, 255, 0);
+            font-family: "Nothing You Could Do",cursive;
+            font-size: 40px;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
         <!-- Nav bar -->
         <header class="header">
             <div id="logo">
-                <a href="/">
-                    <img src="./static/images/logo.png" alt="">
+                <a href="/">    
+                    <img src="{% static 'images/logo.png' %}" alt="">
                 </a>
             </div>
             <nav id="navbar">
                 <ul>
                     <li><a href="/" class="nav__link {% block active1 %}{% endblock active1 %}">home</a></li>
-                    <li><a href="/">menu</a></li>
+                    <li><a href="/menu/" class="nav__link {% block active2 %}{% endblock active2 %}">menu</a></li>
                     <li><a href="/">services</a></li>
                     <li><a href="/">blog</a></li>
                     <li><a href="/">about</a></li>
                     <li><a href="/">contact</a></li>
+                    <li><a href="/orders/" class="order__link nav__link {% block active3 %}{% endblock active3 %}">Orders <span class="order__num">{{total_pizzas}}</span></a></li>
                 </ul>
             </nav>
         </header>

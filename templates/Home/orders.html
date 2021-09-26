@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Orders{% endblock title %}
+{% block active3 %}active{% endblock active3 %}
+{% block body %}
+<section id="orders">
+{% if order %}
+    <h1>Yor orders</h1>
+    <div class="table__orders__container">
+        <div class="table__orders">
+            <table>
+                <tr>
+                    <th>Pizza Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                </tr>
+            {% for pizza in order %}
+                <tr>
+                    <td>{{pizza.Pizza_name}}</th>
+                    <td>{{pizza.Pizza_desc}}</td>
+                    <td>${{pizza.Pizza_price}}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <th>Your</th>
+                <th>Total Price =</th>
+                <th>${{total_price}}</th>
+            </tr>
+            </table>
+        </div>
+    </div>
+    <h4>Please Pay on delivery !</h4>
+{% else %}
+<h4>No Orders Yet ! Plesae Make At Least One <a href="/menu/">Order</a></h4>
+{% endif %}
+</section>
+{% endblock body %}

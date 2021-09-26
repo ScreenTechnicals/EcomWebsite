@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Menu{% endblock title %}
+{% block active2 %}active{% endblock active2 %}
+{% block body %}
+<section id="section__four" class="menu">
+    <h1>HOT PIZZA MENUS</h1>
+    <p>Far far away, behind the word mountains, far from the countries Vokalia and</p>
+    <p>Consonantia, there live the blind texts.</p>
+    <div class="pizza__container__box">
+    {% for pizza in pizzas %}
+        <form action="/menu/" method="POST" class="card">
+        {% csrf_token %}
+            <div class="image"><img src="{{pizza.image_url}}" alt=""></div>
+            <div class="pizza__content">
+            <input type="text" name="sno" id="sno" value="{{pizza.sno}}" style="display:none;">
+                <h2>{{pizza.Pizza_name}}</h2>
+                <p>{{pizza.Pizza_desc}}</p>
+                <div class="price__order__btn__box">
+                    <h4>"${{pizza.Pizza_price}}"</h4>
+                    <button type="submit">Order Now</button>
+                </div>
+            </div>
+        </form>
+    {% endfor %}
+    </div>
+</section>
+{% endblock body %}
