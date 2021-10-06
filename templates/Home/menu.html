@@ -14,6 +14,7 @@
             <div class="image"><img src="{{pizza.image_url}}" alt=""></div>
             <div class="pizza__content">
             <input type="text" name="sno" id="sno" value="{{pizza.sno}}" style="display:none;">
+            <input type="text" name="user_logedin" id="user_logedin" value="{% if user.is_authenticated %}{{request.user}}{% endif %}" style="display:none;" >
                 <h2>{{pizza.Pizza_name}}</h2>
                 <p>{{pizza.Pizza_desc}}</p>
                 <div class="price__order__btn__box">

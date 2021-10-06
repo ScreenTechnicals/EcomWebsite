@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock title %}
+{% block body %}
+<section id="signup">
+<h1>Login</h1>
+    <div class="form__box">
+        <form action="/accounts/login/" method="POST">
+        {% csrf_token %}
+            <div>
+                <label for="user_name_">Username:</label>
+                <input type="text" id="user_name_" name="user_name_" required>
+            </div>
+            <div>
+                <label for="pass_">Password:</label>
+                <input type="password" id="pass_" name="pass_" required>
+            </div>
+            <div class="btn-submit-form">
+                <button type="submit">Submit</button>
+            </div>
+            <div>
+                <p>Don't have an account! <a href="/accounts/signup/">Sign Up</a></p>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock body %}

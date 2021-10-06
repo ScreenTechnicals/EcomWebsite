@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from .models import Pizza, Orders
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, auth
+from django.contrib import messages
 # Create your views here.
 def home(request):
     pizza = Pizza.objects.all()
@@ -8,7 +9,8 @@ def home(request):
     second_last = pizza[len(pizza)-2]
     third_last = pizza[len(pizza)-3]
     forth_last = pizza[len(pizza)-4]
-    user = User.objects.all().first()
+    current_username = request.user.username
+    user = User.objects.filter(username=current_username).first()
     order = Orders.objects.filter(User=user)
     total_pizzas = len(order)
 
@@ -24,7 +26,8 @@ def home(request):
 
 
 def orders(request):
-    user = User.objects.all().first()
+    current_username = request.user.username
+    user = User.objects.filter(username=current_username).first()
     order = Orders.objects.filter(User=user)
     # print(order)
     price_list = []
@@ -45,13 +48,15 @@ def orders(request):
 
 def menu(request):
     pizzas = Pizza.objects.all() 
-    user = User.objects.all().first()
+    current_username = request.user.username
+    user = User.objects.filter(username=current_username).first()
     order = Orders.objects.filter(User=user)
     total_pizzas = len(order)
     context = {
         'pizzas':pizzas,
         'total_pizzas':total_pizzas,
     }
+    # Taking Oreders
     if request.method == 'POST':
         sno = request.POST['sno']
         pizza_ = Pizza.objects.filter(sno=sno).first()
@@ -59,9 +64,74 @@ def menu(request):
         p_desc = pizza_.Pizza_desc
         p_price = pizza_.Pizza_price
 
-        # print(p_name)
-        user = User.objects.all().first()
+        
+        current_username = request.user.username
+        user = User.objects.filter(username=current_username).first()
         orders = Orders(Pizza_name=p_name, Pizza_desc=p_desc, Pizza_price=p_price, User = user)
         orders.save()
         return redirect("/menu/")
     return render(request, "Home/menu.html", context)
+
+
+def signup(request):
+    current_username = request.user.username
+    user = User.objects.filter(username=current_username).first()
+    order = Orders.objects.filter(User=user)
+    total_pizzas = len(order)
+    context = {
+        'total_pizzas':total_pizzas,
+    }
+    if request.method == "POST":
+        f_name = request.POST['f_name']
+        l_name = request.POST['l_name']
+        user_name = request.POST['user_name']
+        user_email = request.POST['user_email']
+        pass1 = request.POST['pass1']
+        pass2 = request.POST['pass2']
+
+        if pass1 == pass2:
+            if User.objects.filter(username=user_name).exists() and User.objects.filter(email=user_email).exists():
+                messages.warning(request, "Username and Email are already taken")
+
+            elif User.objects.filter(username=user_name).exists():
+                messages.warning(request, "Username already taken")
+
+            elif User.objects.filter(email=user_email).exists():
+                messages.warning(request, "Email already taken")
+            else:
+                user = User.objects.create_user(user_name, user_email, pass1)
+                user.first_name = f_name
+                user.last_name = l_name
+                user.save()
+                user_login = auth.authenticate(username=user_name, password=pass1)
+                if user_login is not None:
+                    auth.login(request, user_login)
+                    messages.success(request, "Successfully Logged In !")
+                    return redirect("/")
+                else:
+                    messages.success(request, "Invalid Sign Up Inputs Given !")
+                    
+
+        else:
+            messages.warning(request, "Create Password and Confirmed Password Don't Match")
+
+    return render(request, "Home/signup.html", context)
+    
+def login(request):
+    if request.method == "POST":
+        user_name_ = request.POST['user_name_']
+        pass_ = request.POST['pass_']
+        user_login = auth.authenticate(username=user_name_, password=pass_)
+        if user_login is not None:
+            auth.login(request, user_login)
+            messages.success(request, "Successfully Logged In !")
+            return redirect("/")
+        else:
+            messages.warning(request, "Sign up First")
+
+    return render(request, "Home\login.html")
+
+def logout(request):
+    if request.method == "POST":
+        auth.logout(request)
+        return redirect("/")

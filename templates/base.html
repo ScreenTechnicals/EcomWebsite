@@ -207,7 +207,7 @@
             color: rgb(255, 211, 130);
         }
         #section__three .right__text{
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('./static/images/bg.webp');
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(138, 106, 106, 0.3)), url('./static/images/bg.webp');
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
@@ -358,6 +358,82 @@
             font-size: 40px;
             text-decoration: underline;
         }
+        #signup{
+            width: 100%;
+            min-height: 100vh;
+            background: rgb(49, 49, 49);
+            padding-top: 170px;
+            color: #fff;
+        }
+        #signup h1{
+            text-align: center;
+            font-family: 'Josefin Sans';
+            font-weight: normal;
+            font-size: 40px;
+            margin-bottom: 40px;
+        }
+        #signup .form__box{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #signup .form__box form{
+            background: #fff;
+            width: 30%;
+            padding: 30px;
+            box-shadow: 0 0 10px 1px #000000;
+        }
+        #signup .form__box form label{
+            display: block;
+            color: #000;
+            font-size: 19px;
+        }
+        #signup .form__box form input{
+            display: block;
+            width: 100%;
+            padding: 5px;
+            font-size: 18px;
+            border: none;
+            outline: none;
+            border-bottom: 1px solid orangered;
+        }
+        #signup .form__box form input:focus{
+            border-bottom: 2px solid red;
+        }
+        #signup .form__box form div{
+            margin: 10px 0;
+        }
+        #signup .form__box form .btn-submit-form{
+            padding: 10px 0;
+        }
+        
+        #signup .form__box form button{
+            display: block;
+            width: 100%;
+            background: orangered;
+            color: #fff;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: normal;
+            font-family: 'Josefin Sans';
+            border: none;
+            outline: none;
+            transition: all .4s ease;
+        }
+        #signup .form__box form button:hover{
+            background: rgb(255, 0, 0);
+            transition: all .4s ease;
+        }
+        #signup .form__box form p{
+            text-align: center;
+            color: #000;
+        }
+        #signup .form__box form p a{
+            text-decoration: underline;
+            color: violet;
+        }
     </style>
 </head>
 <body>
@@ -373,10 +449,30 @@
                     <li><a href="/" class="nav__link {% block active1 %}{% endblock active1 %}">home</a></li>
                     <li><a href="/menu/" class="nav__link {% block active2 %}{% endblock active2 %}">menu</a></li>
                     <li><a href="/">services</a></li>
-                    <li><a href="/">blog</a></li>
                     <li><a href="/">about</a></li>
                     <li><a href="/">contact</a></li>
-                    <li><a href="/orders/" class="order__link nav__link {% block active3 %}{% endblock active3 %}">Orders <span class="order__num">{{total_pizzas}}</span></a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="/">Profile</a></li>
+                        {% comment %} <form action="/accounts/logout/" method="POST">
+                        {% csrf_token %}
+                            <button type="submit">Logout</button>
+                        </form> {% endcomment %}
+                    {% else %}
+                        <li><a href="/accounts/login/">Login</a></li>
+                    {% endif %}
+
+                    <li><a href="/orders/" class="order__link nav__link {% block active3 %}{% endblock active3 %}">Orders 
+                        {% if total_pizzas %}
+                            <span class="order__num">
+                                {{total_pizzas}}
+                            </span>
+                        {% else %}
+                        <span class="order__num">
+                               0
+                            </span>
+                        {% endif %}
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </header>
