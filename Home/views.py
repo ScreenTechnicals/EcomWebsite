@@ -1,7 +1,9 @@
+from django.forms.utils import pretty_name
 from django.shortcuts import redirect, render
-from .models import Pizza, Orders
+from .models import Pizza, Orders, Profile
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
+from .forms import ProfileForm
 # Create your views here.
 def home(request):
     pizza = Pizza.objects.all()
@@ -135,3 +137,25 @@ def logout(request):
     if request.method == "POST":
         auth.logout(request)
         return redirect("/")
+
+def profile(request):
+    current_user = request.user
+    
+    form = ProfileForm(instance=current_user)
+    if request.method == "POST":
+        profile = Profile(User=current_user, profile_Image=request.FILES['profile_Image'])
+        profile.save()
+
+    profile_objects = Profile.objects.filter(User=request.user)
+    if profile_objects:
+        profile_iamge_display = Profile.objects.filter(User=current_user).last()
+        profile_iamge_display_url = profile_iamge_display.profile_Image 
+    else:
+        profile_iamge_display_url = "images/defaultuser.png"
+    
+    context = {
+        'profile_iamge_display_url':profile_iamge_display_url,
+        'form':form,
+    }
+            
+    return render(request, "Home/profile.html", context)

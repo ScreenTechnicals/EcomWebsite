@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Profile{% endblock title %}
+{% block body %}
+<section id="profile">
+    <div class="profile__contaier">
+        <div class="image__box__profile">
+            <div class="image__container">
+                <img src="/media/{{profile_iamge_display_url}}" alt="">
+                <div class="edit_image"><i class="fas fa-edit"></i><div>
+                </div>
+            </div>
+        </div> 
+        <div class="details">
+                <h4>{% if request.user.first_name %}{{request.user.first_name}} {{request.user.last_name}} (Full Name){% endif %}</h4>
+                <h4>{% if request.user.username %}{{request.user.username}} (Username){% endif %}</h4>
+                <h4>{% if request.user.email %}{{request.user.email}} (Email){% endif %}</h4>
+                <form action="/accounts/logout/" method="POST">
+                {% csrf_token %}
+                    <button type="submit">Logout</button>
+                </form>
+            </div>
+            <div class="address">
+                <div>
+                    <h4>(Address)</h4>
+                    <p>9 Sigrid Highway, Bilzen New Zeland  <i class="fas fa-edit"></i></p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% comment %} recent orders with time {% endcomment %}
+<div class="upload_image_form">
+    <form action="/profile/" method="POST" class="image_form" enctype="multipart/form-data">
+    {% csrf_token %}
+        <div class="cross"><i class="fas fa-times closeImageForm"></i></div>
+       <div class="image_btns">
+             <h3>Upload Your Profile Image !</h3>
+            {{form.as_p}}
+            <button type="submit">Upload</button>
+       </div>
+    </form>
+</div>
+</section>
+{% endblock body %}

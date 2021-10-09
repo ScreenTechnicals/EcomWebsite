@@ -21,3 +21,8 @@ class Orders(models.Model):
     def __str__(self):
         return self.Pizza_name
 
+
+class Profile(models.Model):
+    User = models.ForeignKey(User, on_delete=models.CASCADE, related_name="profile", blank=True, null=True)
+    profile_Image = models.ImageField(upload_to="images", default="images/defaultuser.png", blank=True, null=True)
+    

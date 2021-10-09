@@ -434,6 +434,166 @@
             text-decoration: underline;
             color: violet;
         }
+        #profile{
+            width: 100%;
+            min-height: 100vh;
+            background: rgb(27, 27, 27);
+            padding: 0 60px;
+            padding-top: 170px;
+
+        }
+        #profile .profile__contaier{
+            width: 100%;
+            background: #f1f1f1;
+            padding: 30px;
+            border-radius: 40px;
+        }
+        #profile .profile__contaier .image__box__profile{
+            display: flex;
+            justify-content: space-around;
+            /* flex-direction: column; */
+            align-items: center;
+        }
+        #profile .profile__contaier .image__box__profile .image__container{
+            width: 200px;
+            height: 200px;
+            overflow: hidden;
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+        }
+        #profile .profile__contaier .image__box__profile .image__container img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+        #profile .profile__contaier .image__box__profile .details h4{
+            font-family: 'Josefin Sans';
+            font-size: 20px;
+            line-height: 30px;
+        }
+        #profile .profile__contaier .image__box__profile .details form{
+            padding: 20px 0;
+        }
+        #profile .profile__contaier .image__box__profile .details form button{
+            border: none;
+            outline: none;
+            background: red;
+            color: #fff;
+            padding: 10px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        #profile .profile__contaier .image__box__profile .address{
+            font-size: 20px;
+        }
+        #profile .profile__contaier .image__box__profile .address i{
+            color: #000;
+            padding: 10px;
+            cursor: pointer;
+        }
+        #profile .profile__contaier .image__box__profile .image__container .edit_image{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            visibility: hidden;
+        }
+        #profile .profile__contaier .image__box__profile .image__container:hover > .edit_image{
+            visibility: visible;
+        }
+        #profile .profile__contaier .image__box__profile .image__container .edit_image i{
+            transform: scale(0);
+            transition: all .4s ease;
+            z-index: 2;
+        }
+        #profile .profile__contaier .image__box__profile .image__container:hover > .edit_image i{
+            transform: scale(2);
+            /* background: #000;
+            width: 100%;
+            height: 100%; */
+            transition: all .4s ease;
+        }
+        #profile .profile__contaier .image__box__profile .image__container .edit_image div{
+            width: 0%;
+            height: 0%;
+            transition: all .4s ease;
+            border-radius: 50%;
+            position: absolute;
+        }
+        #profile .profile__contaier .image__box__profile .image__container:hover > .edit_image div{
+            background: rgba(0, 0, 0, 0.555);
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            transition: all .4s ease;
+        }
+        #profile .upload_image_form{
+            width: 400px;
+            height: 200px;
+            background: #f1f1f1;
+            box-shadow: 0 0 10px 5px #000;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+        #profile .cross{
+            width: 100%;
+            text-align: right;
+        }
+        #profile .cross i{
+            padding: 15px;
+            font-size: 20px;
+            color: #000;
+            cursor: pointer;
+        }
+        #profile .upload_image_form .image_btns{
+            width: 100%;
+            height: 100%;
+            margin: 10px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            /* position: relative; */
+        }
+        #profile .upload_image_form .image_btns input{
+            color: red;
+            text-decoration: underline;
+            margin: 5px;
+            cursor: pointer;
+            position: relative;
+            left: 50px;
+        }
+        #profile .upload_image_form .image_btns button{
+            border: none;
+            outline: none;
+            background: orangered;
+            padding: 10px 30px;
+            color: #fff;
+            font-size: 18px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        #profile .upload_image_form .image_btns button:hover{
+            background: rgb(255, 238, 0);
+            color: #000;
+        }
+        #profile .upload_image_form .image_btns label{
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -452,7 +612,7 @@
                     <li><a href="/">about</a></li>
                     <li><a href="/">contact</a></li>
                     {% if user.is_authenticated %}
-                        <li><a href="/">Profile</a></li>
+                        <li><a href="/profile/">Profile</a></li>
                         {% comment %} <form action="/accounts/logout/" method="POST">
                         {% csrf_token %}
                             <button type="submit">Logout</button>
@@ -481,5 +641,16 @@
         <footer class="footer">
 
         </footer>
+        <script>
+            const closeImageForm = document.querySelector('.closeImageForm');
+            const uploadImageForm = document.querySelector('.upload_image_form');
+            const imageContainer = document.querySelector('.image__container');
+            closeImageForm.addEventListener('click', function(){
+                uploadImageForm.style.display = "none";
+            });
+            imageContainer.addEventListener('click', function(){
+                uploadImageForm.style.display = "block";
+            });
+        </script>
 </body>
 </html>
