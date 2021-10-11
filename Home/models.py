@@ -17,12 +17,20 @@ class Orders(models.Model):
     Pizza_desc = models.CharField(max_length=400, default="")
     Pizza_price = models.FloatField(default=0)
     User = models.ForeignKey(User, on_delete=models.CASCADE)
-
+    order_confirmed = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.Pizza_name
 
 
 class Profile(models.Model):
-    User = models.ForeignKey(User, on_delete=models.CASCADE, related_name="profile", blank=True, null=True)
+    User = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     profile_Image = models.ImageField(upload_to="images", default="images/defaultuser.png", blank=True, null=True)
+    
+
+class Address(models.Model):
+    User = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    address = models.TextField()
+    def __str__(self):
+        return self.address
     

@@ -328,6 +328,43 @@
         #orders .table__orders__container .table__orders table tr > td{
             font-weight: normal;
         }
+        #orders .table__orders__container .table__orders table tr > td > form input{
+            display: none;
+        }
+        #orders .table__orders__container .table__orders table tr > td > form button{
+            background: transparent;
+            outline: none;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+        }
+         #orders .table__orders__container .table__orders table tr > td > form button i{
+             color: red;
+         }
+         #orders .table__orders__container .table__orders table tr > td > form button:hover{
+             color: red;
+         }
+
+         /*  */
+         #orders .table__orders__container .table__orders table tr > th > form input{
+            display: none;
+        }
+        #orders .table__orders__container .table__orders table tr > th > form button{
+            background: transparent;
+            outline: none;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+        }
+         #orders .table__orders__container .table__orders table tr > th > form button i{
+             color: red;
+         }
+         #orders .table__orders__container .table__orders table tr > th > form button:hover{
+             color: red;
+         }
+         /*  */
         .menu{
             padding: 100px 30px;
             background: rgb(31, 31, 31);
@@ -344,6 +381,18 @@
             border-radius: 50%;
             padding: 5px 10px;
             
+        }
+        #orders .confirm_orders form {
+            padding-bottom: 30px;
+        }
+        #orders .confirm_orders form button{
+            background: orangered;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-size: 25px;
+            padding: 10px 30px;
+            cursor: pointer;
         }
         #orders h4{
             text-align: center;
@@ -451,7 +500,6 @@
         #profile .profile__contaier .image__box__profile{
             display: flex;
             justify-content: space-around;
-            /* flex-direction: column; */
             align-items: center;
         }
         #profile .profile__contaier .image__box__profile .image__container{
@@ -494,6 +542,11 @@
             color: #000;
             padding: 10px;
             cursor: pointer;
+            transition: all .4s ease;
+        }
+        #profile .profile__contaier .image__box__profile .address i:hover{
+            transform: scale(1.3);
+            transition: all .4s ease;
         }
         #profile .profile__contaier .image__box__profile .image__container .edit_image{
             position: absolute;
@@ -517,9 +570,6 @@
         }
         #profile .profile__contaier .image__box__profile .image__container:hover > .edit_image i{
             transform: scale(2);
-            /* background: #000;
-            width: 100%;
-            height: 100%; */
             transition: all .4s ease;
         }
         #profile .profile__contaier .image__box__profile .image__container .edit_image div{
@@ -566,7 +616,6 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            /* position: relative; */
         }
         #profile .upload_image_form .image_btns input{
             color: red;
@@ -593,6 +642,53 @@
         }
         #profile .upload_image_form .image_btns label{
             display: none;
+        }
+        #profile .address_upload{
+            width: 400px;
+            height: 270px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #f1f1f1;
+            box-shadow: 0 0 10px 5px #000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        #profile .address_upload .cross2{
+            width: 100%;
+            text-align: end;
+        }
+        #profile .address_upload .cross2 i{
+            padding: 10px;
+            font-size: 20px;
+            color: #000;
+            cursor: pointer;
+        }
+        #profile .address_upload h1{
+            margin: 10px 0;
+        }
+        #profile .address_upload textarea{
+            padding: 10px;
+        }
+        #profile .address_upload .btn__address{
+            width: 100%;
+        }
+        #profile .address_upload .btn__address button{
+            width: 100%;
+            padding: 10px;
+            background: orangered;
+            outline: none;
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        #profile .address_upload .btn__address button:hover{
+            background: red;
         }
     </style>
 </head>
@@ -650,6 +746,16 @@
             });
             imageContainer.addEventListener('click', function(){
                 uploadImageForm.style.display = "block";
+            });
+
+            const addressEdit = document.querySelector('.address_edit');
+            const addressUpload = document.querySelector('.address_upload');
+            const closeAddressForm = document.querySelector('.closeAddressForm');
+            addressEdit.addEventListener("click", function(){
+                addressUpload.style.display = "flex";
+            });
+            closeAddressForm.addEventListener("click", function(){
+                addressUpload.style.display = "none";
             });
         </script>
 </body>

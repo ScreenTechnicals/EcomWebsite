@@ -1,6 +1,6 @@
 from django.forms.utils import pretty_name
 from django.shortcuts import redirect, render
-from .models import Pizza, Orders, Profile
+from .models import Address, Pizza, Orders, Profile
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from .forms import ProfileForm
@@ -120,6 +120,13 @@ def signup(request):
     return render(request, "Home/signup.html", context)
     
 def login(request):
+    current_username = request.user.username
+    user = User.objects.filter(username=current_username).first()
+    order = Orders.objects.filter(User=user)
+    total_pizzas = len(order)
+    context = {
+        'total_pizzas':total_pizzas,
+    }
     if request.method == "POST":
         user_name_ = request.POST['user_name_']
         pass_ = request.POST['pass_']
@@ -131,7 +138,7 @@ def login(request):
         else:
             messages.warning(request, "Sign up First")
 
-    return render(request, "Home\login.html")
+    return render(request, "Home\login.html", context)
 
 def logout(request):
     if request.method == "POST":
@@ -139,12 +146,21 @@ def logout(request):
         return redirect("/")
 
 def profile(request):
+    # Total no of orders by the logedin user
+    current_username = request.user.username
+    user = User.objects.filter(username=current_username).first()
+    order = Orders.objects.filter(User=user)
+    total_pizzas = len(order)
+
+    # current user object
     current_user = request.user
-    
+    # Profile Image Upload and Update Handling
     form = ProfileForm(instance=current_user)
     if request.method == "POST":
-        profile = Profile(User=current_user, profile_Image=request.FILES['profile_Image'])
+        profile_Image=request.FILES['profile_Image']
+        profile = Profile(User=current_user, profile_Image=profile_Image)
         profile.save()
+    
 
     profile_objects = Profile.objects.filter(User=request.user)
     if profile_objects:
@@ -152,10 +168,59 @@ def profile(request):
         profile_iamge_display_url = profile_iamge_display.profile_Image 
     else:
         profile_iamge_display_url = "images/defaultuser.png"
-    
+
+    # Address show
+    address = Address.objects.filter(User = current_user).first()   
+    if address: 
+        address_display = address.address
+    else:
+        address_display = "No Address, Please Add!"
+
     context = {
         'profile_iamge_display_url':profile_iamge_display_url,
         'form':form,
+        'total_pizzas':total_pizzas,
+        'address_display':address_display,
     }
             
     return render(request, "Home/profile.html", context)
+
+def address(request):
+    # Address handling
+    # current user object
+    current_user = request.user
+    if request.method == "POST":
+        address_ = request.POST['address_area']
+        if not Address.objects.filter(User=current_user).first():    
+            address = Address(User=current_user, address=address_)
+            address.save()
+        else:
+            address = Address.objects.filter(User=current_user).update(address=address_)
+            
+        return redirect("/profile/")
+
+def deleteOrder(request):
+    if request.method == "POST":
+        orderId = request.POST['order_id']
+        orderToBeDeleted = Orders.objects.get(id=orderId)
+        orderToBeDeleted.delete() 
+        return redirect("/orders/")
+
+def deleteAllOrder(request):
+    if request.method == "POST":
+        # current user object
+        current_user = request.user
+        allOrders = Orders.objects.filter(User=current_user)
+        # print(allOrders)
+        allOrders.delete()
+        return redirect("/orders/")
+        
+
+def orderConfirmed(request):
+    if request.method == "POST":
+        # current user object
+        current_user = request.user
+        allOrders = Orders.objects.filter(User=current_user).update(order_confirmed=True)
+        return redirect("/orders/")
+        
+

@@ -12,21 +12,40 @@
                     <th>Pizza Name</th>
                     <th>Description</th>
                     <th>Price</th>
+                    <th>Cancel</th>
                 </tr>
             {% for pizza in order %}
                 <tr>
                     <td>{{pizza.Pizza_name}}</th>
                     <td>{{pizza.Pizza_desc}}</td>
                     <td>${{pizza.Pizza_price}}</td>
+                    <td><form action="/deleteOrder/" method="POST">
+                        {% csrf_token %}
+                        <input type="text" name="order_id" id="order_id" value="{{pizza.id}}">
+                        <button type="submit"><i class="fas fa-trash-alt"></i> Delete</button>
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
             <tr>
                 <th>Your</th>
                 <th>Total Price =</th>
                 <th>${{total_price}}</th>
+                <th>
+                    <form action="/deleteAllOrder/" method="POST">
+                    {% csrf_token %}
+                        <button type="submit"><i class="fas fa-trash-alt"></i> Delete All</button>
+                    </form>
+                </th>
             </tr>
             </table>
         </div>
+    </div>
+    <div class="confirm_orders">
+        <form action="/orderConfirmed/" method="POST">
+        {% csrf_token %}
+            <button type="submit">Confirm Your Order <i class="fas fa-check"></i></button>
+        </form>
     </div>
     <h4>Please Pay on delivery !</h4>
 {% else %}

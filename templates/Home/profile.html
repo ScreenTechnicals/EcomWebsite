@@ -23,12 +23,13 @@
             <div class="address">
                 <div>
                     <h4>(Address)</h4>
-                    <p>9 Sigrid Highway, Bilzen New Zeland  <i class="fas fa-edit"></i></p>
+                    <p>{{address_display}}  <i class="fas fa-edit address_edit"></i></p>
                 </div>
             </div>
         </div>
     </div>
 {% comment %} recent orders with time {% endcomment %}
+<!-- Image Uplaod Form -->
 <div class="upload_image_form">
     <form action="/profile/" method="POST" class="image_form" enctype="multipart/form-data">
     {% csrf_token %}
@@ -40,5 +41,21 @@
        </div>
     </form>
 </div>
+<!-- Image Uplaod Form -->
+<!-- Address Uplaod Form -->
+<div class="address_upload">
+    <form action="/address/" method="POST">
+    {% csrf_token %}
+        <div class="cross2"><i class="fas fa-times closeAddressForm"></i></div>
+        <h1>Upload Your Address !</h1>
+        <textarea name="address_area" id="address_area" cols="50" rows="3"></textarea>
+        <div class="btn__address">
+            <button type="submit">Upload</button>
+        </div>
+    </form>
+</div>
+<!-- Address Uplaod Form -->
+
+
 </section>
 {% endblock body %}
