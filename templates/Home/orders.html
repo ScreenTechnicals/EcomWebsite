@@ -11,6 +11,7 @@
                 <tr>
                     <th>Pizza Name</th>
                     <th>Description</th>
+                    <th>Quantity</th>
                     <th>Price</th>
                     <th>Cancel</th>
                 </tr>
@@ -18,6 +19,20 @@
                 <tr>
                     <td>{{pizza.Pizza_name}}</th>
                     <td>{{pizza.Pizza_desc}}</td>
+                    <td>
+                        <form action="/decreament/" method="POST" class="btn__increament__decreament">
+                        {% csrf_token %}
+                            <input type="text" name="order_Id" id="order_Id" value="{{pizza.id}}">
+                            <input type="text" name="Pizza_name_" id="Pizza_name_" value="{{pizza.Pizza_name}}">
+                            <button type="submit"><i class="fas fa-minus"></i></button>
+                        </form>
+                        {{pizza.quantity}}
+                        <form action="/increament/" method="POST" class="btn__increament__decreament">
+                        {% csrf_token %}
+                            <input type="text" name="order_Id" id="order_Id" value="{{pizza.id}}">
+                            <button type="submit"><i class="fas fa-plus"></i></button>
+                        </form>
+                    </td>
                     <td>${{pizza.Pizza_price}}</td>
                     <td><form action="/deleteOrder/" method="POST">
                         {% csrf_token %}
@@ -31,6 +46,7 @@
                 <th>Your</th>
                 <th>Total Price =</th>
                 <th>${{total_price}}</th>
+                <th></th>
                 <th>
                     <form action="/deleteAllOrder/" method="POST">
                     {% csrf_token %}

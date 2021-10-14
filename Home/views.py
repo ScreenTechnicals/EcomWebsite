@@ -11,10 +11,15 @@ def home(request):
     second_last = pizza[len(pizza)-2]
     third_last = pizza[len(pizza)-3]
     forth_last = pizza[len(pizza)-4]
-    current_username = request.user.username
-    user = User.objects.filter(username=current_username).first()
-    order = Orders.objects.filter(User=user)
-    total_pizzas = len(order)
+    # Total Num Of Orders
+    current_user = request.user
+    ordersOfCurrentUser = Orders.objects.filter(User=current_user)
+    totalOrdersList = []
+    for pizzaOrder in ordersOfCurrentUser:
+        quantity = pizzaOrder.quantity
+        totalOrdersList.append(quantity)
+    
+    totalOrders = sum(totalOrdersList)
 
     context = {
         'pizza': pizza,
@@ -22,7 +27,7 @@ def home(request):
         'second_last': second_last,
         'third_last':third_last,
         'forth_last':forth_last,
-        'total_pizzas':total_pizzas,
+        'totalOrders':totalOrders,
     }
     return render(request, "Home/index.html", context)
 
@@ -32,31 +37,96 @@ def orders(request):
     user = User.objects.filter(username=current_username).first()
     order = Orders.objects.filter(User=user)
     # print(order)
+
     price_list = []
     for pizza in order:
         price = pizza.Pizza_price
         price_list.append(price)
-    # print(price_list)
+
     total_price = round(sum(price_list), 3)
-    # print(total_price)
-    total_pizzas = len(order)
+    # Total Num Of Orders
+    current_user = request.user
+    ordersOfCurrentUser = Orders.objects.filter(User=current_user)
+    totalOrdersList = []
+    for pizzaOrder in ordersOfCurrentUser:
+        quantity = pizzaOrder.quantity
+        totalOrdersList.append(quantity)
+    
+    totalOrders = sum(totalOrdersList)
+    # print(totalOrders)
     context = {
         'order':order,
         'total_price':total_price,
-        'total_pizzas':total_pizzas,
+        'totalOrders':totalOrders,
     }
     return render(request, "Home/orders.html", context)
 
+def increament(request):
+    if request.method == "POST":
+        # current_user = request.user
+        orderId = request.POST['order_Id']
+        order = Orders.objects.filter(id=orderId)
+        order_ = Orders.objects.filter(id=orderId).first()
+        pizzaPrice = order_.Pizza_price
 
+        if order_.quantity == 0:
+            order.update(quantity=1)
+            print(order_.quantity)
+            return redirect("/orders/")
+        else:
+            order_.quantity += 1
+            order.update(quantity=order_.quantity)
+            pizzaPrice = round(pizzaPrice * order_.quantity, 3)
+            order.update(Pizza_price=pizzaPrice)
+            
+            return redirect("/orders/")
+
+                
+def decreament(request):
+    if request.method == "POST":
+        # current_user = request.user
+        orderId = request.POST['order_Id']
+        Pizza_name_ = request.POST['Pizza_name_']
+        order = Orders.objects.filter(id=orderId)
+        order_ = Orders.objects.filter(id=orderId).first()
+        pizzaPrice = order_.Pizza_price
+
+        if order_.quantity == 1:
+            order.update(quantity=0)
+            print(order_.quantity)
+            order.delete()
+            return redirect("/orders/")
+            
+        else:
+            order_.quantity -= 1
+            print(order_.quantity)
+            order.update(quantity=order_.quantity)
+            pizzaPrice = Pizza.objects.filter(Pizza_name=Pizza_name_).first().Pizza_price
+            pizzaPrice = round(pizzaPrice * order_.quantity, 3)
+            order.update(Pizza_price=pizzaPrice)
+            return redirect("/orders/")
+
+                
+       
+
+        
 def menu(request):
     pizzas = Pizza.objects.all() 
     current_username = request.user.username
     user = User.objects.filter(username=current_username).first()
     order = Orders.objects.filter(User=user)
-    total_pizzas = len(order)
+    # Total Num Of Orders
+    current_user = request.user
+    ordersOfCurrentUser = Orders.objects.filter(User=current_user)
+    totalOrdersList = []
+    for pizzaOrder in ordersOfCurrentUser:
+        quantity = pizzaOrder.quantity
+        totalOrdersList.append(quantity)
+    
+    totalOrders = sum(totalOrdersList)
     context = {
         'pizzas':pizzas,
-        'total_pizzas':total_pizzas,
+        'totalOrders':totalOrders,
     }
     # Taking Oreders
     if request.method == 'POST':
@@ -69,9 +139,29 @@ def menu(request):
         
         current_username = request.user.username
         user = User.objects.filter(username=current_username).first()
-        orders = Orders(Pizza_name=p_name, Pizza_desc=p_desc, Pizza_price=p_price, User = user)
-        orders.save()
-        return redirect("/menu/")
+        pizza_name = pizza_.Pizza_name
+        pizzanameOreders = Orders.objects.filter(Pizza_name=pizza_name)
+        if not pizzanameOreders:
+            orders = Orders(Pizza_name=p_name, Pizza_desc=p_desc, Pizza_price=p_price, User = user)
+            orders.save()
+            return redirect("/menu/")
+        else:
+            order_ = pizzanameOreders.first().quantity
+            pizzaPrice = pizzanameOreders.first().Pizza_price
+            if order_ == 0:
+                order.update(quantity=1)
+                print(order_.quantity)
+                return redirect("/menu/")
+            else:
+                order_ += 1
+                order.update(quantity=order_)
+
+                pizzaPrice = round(pizzaPrice * order_, 3)
+                order.update(Pizza_price=pizzaPrice)
+                
+                return redirect("/menu/")
+
+
     return render(request, "Home/menu.html", context)
 
 
@@ -150,8 +240,16 @@ def profile(request):
     current_username = request.user.username
     user = User.objects.filter(username=current_username).first()
     order = Orders.objects.filter(User=user)
-    total_pizzas = len(order)
-
+    # total_pizzas = len(order)
+    # Total Num Of Orders
+    current_user = request.user
+    ordersOfCurrentUser = Orders.objects.filter(User=current_user)
+    totalOrdersList = []
+    for pizzaOrder in ordersOfCurrentUser:
+        quantity = pizzaOrder.quantity
+        totalOrdersList.append(quantity)
+    
+    totalOrders = sum(totalOrdersList)
     # current user object
     current_user = request.user
     # Profile Image Upload and Update Handling
@@ -179,7 +277,7 @@ def profile(request):
     context = {
         'profile_iamge_display_url':profile_iamge_display_url,
         'form':form,
-        'total_pizzas':total_pizzas,
+        'totalOrders':totalOrders,
         'address_display':address_display,
     }
             

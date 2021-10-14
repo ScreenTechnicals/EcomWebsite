@@ -12,5 +12,7 @@ urlpatterns = [
     path('deleteOrder/', views.deleteOrder, name="deleteOrder"),
     path('deleteAllOrder/', views.deleteAllOrder, name="deleteAllOrder"),
     path('orderConfirmed/', views.orderConfirmed, name="orderConfirmed"),
+    path('increament/', views.increament, name="increament"),
+    path('decreament/', views.decreament, name="decreament"),
 ]
 

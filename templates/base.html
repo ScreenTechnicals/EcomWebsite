@@ -315,6 +315,7 @@
             border-left: none;
             border-right: none;
             border-collapse: collapse;
+            /* text-align: center; */
         }
         #orders .table__orders__container .table__orders table tr > th, td{
             border: 2px solid rgb(60, 255, 0);
@@ -365,6 +366,24 @@
              color: red;
          }
          /*  */
+         #orders .table__orders__container .table__orders table tr > td > .btn__increament__decreament{
+             display: inline-block;
+             padding: 0 10px;
+         }
+         #orders .table__orders__container .table__orders table tr > td > .btn__increament__decreament i{
+             color: #fff;
+             cursor: pointer;
+             padding: 5px;
+            }
+        #orders .table__orders__container .table__orders table tr > td > .btn__increament__decreament .fa-plus{
+            color: aquamarine;
+        }
+        #orders .table__orders__container .table__orders table tr > td > .btn__increament__decreament .fa-minus{
+            color: coral;
+        }
+        #orders .table__orders__container .table__orders table tr > td > .btn__increament__decreament input{
+            display: none;
+        }
         .menu{
             padding: 100px 30px;
             background: rgb(31, 31, 31);
@@ -718,9 +737,9 @@
                     {% endif %}
 
                     <li><a href="/orders/" class="order__link nav__link {% block active3 %}{% endblock active3 %}">Orders 
-                        {% if total_pizzas %}
+                        {% if totalOrders %}
                             <span class="order__num">
-                                {{total_pizzas}}
+                                {{totalOrders}}
                             </span>
                         {% else %}
                         <span class="order__num">

@@ -18,6 +18,7 @@ class Orders(models.Model):
     Pizza_price = models.FloatField(default=0)
     User = models.ForeignKey(User, on_delete=models.CASCADE)
     order_confirmed = models.BooleanField(default=False)
+    quantity = models.IntegerField(default=1)
     
     def __str__(self):
         return self.Pizza_name
