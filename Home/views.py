@@ -63,7 +63,6 @@ def orders(request):
 
 def increament(request):
     if request.method == "POST":
-        # current_user = request.user
         orderId = request.POST['order_Id']
         order = Orders.objects.filter(id=orderId)
         order_ = Orders.objects.filter(id=orderId).first()
@@ -71,20 +70,17 @@ def increament(request):
 
         if order_.quantity == 0:
             order.update(quantity=1)
-            print(order_.quantity)
             return redirect("/orders/")
         else:
             order_.quantity += 1
             order.update(quantity=order_.quantity)
             pizzaPrice = round(pizzaPrice * order_.quantity, 3)
             order.update(Pizza_price=pizzaPrice)
-            
             return redirect("/orders/")
 
                 
 def decreament(request):
     if request.method == "POST":
-        # current_user = request.user
         orderId = request.POST['order_Id']
         Pizza_name_ = request.POST['Pizza_name_']
         order = Orders.objects.filter(id=orderId)
@@ -93,13 +89,11 @@ def decreament(request):
 
         if order_.quantity == 1:
             order.update(quantity=0)
-            print(order_.quantity)
             order.delete()
             return redirect("/orders/")
             
         else:
             order_.quantity -= 1
-            print(order_.quantity)
             order.update(quantity=order_.quantity)
             pizzaPrice = Pizza.objects.filter(Pizza_name=Pizza_name_).first().Pizza_price
             pizzaPrice = round(pizzaPrice * order_.quantity, 3)
@@ -135,31 +129,25 @@ def menu(request):
         p_name = pizza_.Pizza_name
         p_desc = pizza_.Pizza_desc
         p_price = pizza_.Pizza_price
-
         
-        current_username = request.user.username
-        user = User.objects.filter(username=current_username).first()
-        pizza_name = pizza_.Pizza_name
-        pizzanameOreders = Orders.objects.filter(Pizza_name=pizza_name)
-        if not pizzanameOreders:
+        """to handle quantity in menu"""
+        allorders = Orders.objects.filter(User=request.user, Pizza_name=p_name)
+
+        if not allorders:
             orders = Orders(Pizza_name=p_name, Pizza_desc=p_desc, Pizza_price=p_price, User = user)
             orders.save()
             return redirect("/menu/")
         else:
-            order_ = pizzanameOreders.first().quantity
-            pizzaPrice = pizzanameOreders.first().Pizza_price
-            if order_ == 0:
-                order.update(quantity=1)
-                print(order_.quantity)
+            order_ = Orders.objects.filter(User=request.user, Pizza_name=p_name)
+            order_quantity = order_.first().quantity
+            if order_quantity == 0:
+                order_.update(quantity=1)
                 return redirect("/menu/")
             else:
-                order_ += 1
-                order.update(quantity=order_)
-
-                pizzaPrice = round(pizzaPrice * order_, 3)
-                order.update(Pizza_price=pizzaPrice)
-                
+                order_quantity += 1
+                order_.update(quantity=order_quantity)
                 return redirect("/menu/")
+
 
 
     return render(request, "Home/menu.html", context)
