@@ -1,0 +1,303 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superviser</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Josefin+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Nothing+You+Could+Do&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins";
+        }
+        a{
+            text-decoration: none;
+        }
+        ul{
+            list-style: none;
+        }
+        #supervisor{
+            width: 100%;
+            min-height: 100vh;
+            background: #ecececf2;
+        }
+        .side__supervisor__bar{
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 300px;
+            height: 90vh;
+            background: #fffffff2;
+            margin: 45px;
+            border-radius: 100px;
+            overflow: hidden;
+            box-shadow: 0 0 20px 2px #535353;
+            text-align: center;
+            z-index: 9999;
+        }
+        .side__supervisor__bar .brand__logo{
+            width: 100%;
+            text-align: center;
+            padding: 30px;
+        }
+        .side__supervisor__bar .brand__logo a{
+            font-family: "Josefin Sans";
+            color: rgb(0, 0, 0);
+            font-size: 30px;
+        }
+        .side__supervisor__bar ul li a{
+            color: #000;
+            padding: 20px 0;
+            display: block;
+            padding-right: 20px;
+            font-size: 20px;
+        }
+        .side__supervisor__bar ul li a:hover{
+            background: #000;
+            color: #fff;
+        }
+        .side__supervisor__bar ul li a i{
+            margin: 0 10px;
+        }
+        .active{
+            background: #000;
+            color: #fff !important;
+        }
+        header{
+            width: 100%;
+            height: 15vh;
+            background: rgb(0, 119, 255);
+            position: relative;
+        }
+        header .form{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+            padding: 5px 20px;
+            border-radius: 30px;
+        }
+        header .form input{
+            outline: none;
+            border: none;
+            background: #fff;
+            width: 600px !important;
+            padding: 5px 10px;
+            border-radius: 30px;
+            font-size: 18px;
+        }
+        header .form button{
+            background: transparent;
+            outline: none;
+            border: none;
+            font-size: 20px;
+            color: rgb(255, 94, 0);
+            cursor: pointer;
+            padding: 5px;
+        }
+        .Allorders{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .Allorders .box__users{
+            width: 40%;
+            height: 70vh;
+            background: #fff;
+            padding: 10px;
+            margin: 30px;
+            overflow-y: scroll;
+        }
+        .Allorders .box__users ul li a{
+            width: 100%;
+            background: rgba(0, 0, 0, 0.616);
+            color: #fff;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px;
+            font-size: 18px;
+            transition: all .3s ease;
+        }
+        .Allorders .box__users ul li a:hover{
+            background: #000;
+            transition: all .3s ease;
+        }
+        .Allorders .box__users ul li{
+            margin: 5px 0;
+        }
+        .Allorders .box__users ul li a p{
+            display: inline-block;
+        }
+        .Allorders .box__users ul h1, .contact__list .list ul h1{
+            text-align: center;
+            padding: 30px;
+            font-family: "Nothing You Could Do", cursive;
+            font-weight: bold;
+            font-size: 60px;
+        }
+        .contact__list, .contact_view, .order__view{
+            width: 100%;
+            min-width: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .contact__list > h1{
+            font-family: "Josefin Sans";
+            padding: 30px 0;
+            font-size: 35px;
+        }
+        .contact__list .list{
+            background: #fff;
+            margin: 10px 0;
+            padding: 30px;
+            width: 50%;
+            height: 50vh;
+            overflow-y: scroll;
+        }
+        .contact__list .list ul li a {
+            display: block;
+            background: rgba(0, 0, 0, 0.616);
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .contact__list .list ul li a p{
+            display: inline-block;
+            color: #fff;
+            transition: all .3s ease;
+        }
+        .contact__list .list ul li a:hover{
+            background: #000;
+            transition: all .3s ease;
+        }
+        .contact_view .view_contact{
+            background: #fff;
+            padding: 30px;
+            width: 50%;
+            height: 50vh;
+            overflow-y: scroll;
+            position: relative;
+        }
+        .contact_view .view_contact h2{
+            font-family: "Josefin Sans";
+            font-size: 25px;
+            padding: 10px 0;
+        }
+        .contact_view .view_contact h3{
+            font-family: "Josefin Sans";
+            font-size: 20px;
+            padding: 10px 0;
+        }
+        .contact_view .view_contact .delete__contact{
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        } 
+        .contact_view .view_contact .delete__contact button{
+            background: red;
+            border: none;
+            outline: none;
+            padding: 10px 30px;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .hidden-input{
+            display: none;
+        }
+        .order__view .view__order{
+            width: 50%;
+            height: 50vh;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .profile__order{
+            width: 100%;
+            padding: 10px 30px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .profile__order h1{
+            font-family: "Josefin Sans";
+            font-size: 20px;
+            line-height: 30px;
+            text-align: center;
+            margin: 0 50px;
+        }
+        .order__view .view__order .profile__order{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        /* .order__view .view__order .profile__order img{
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 20px;
+        } */
+        .order_details{
+            width: 100%;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            background: #f1f1f1;
+            padding: 30px;
+        }
+        .dilivered{
+            width: 100%;
+            text-align: center;
+            padding: 30px;
+        }
+        .dilivered form button{
+            background: red;
+            border: none;
+            outline: none;
+            color: #fff;
+            cursor: pointer;
+            padding: 10px 30px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <section id="supervisor">
+        <div class="side__supervisor__bar">
+            <div class="brand__logo">
+                <a href="/dashboard/">
+                    Pizza Corner
+                </a>
+            </div>
+            <ul>
+                <li><a href="/dashboard/" class="active"><i class="fas fa-home"></i>Dashboard</a></li>
+                <li><a href="/contactlist/"><i class="fas fa-phone-alt"></i>Contact List</a></li>
+                <li><a href="#"><i class="fas fa-comments"></i>Feed backs</a></li>
+            </ul>
+        </div>
+        <header>
+            <form class="form" action="/dashboard/search/">
+                <button type="submit"><i class="fas fa-search"></i></button>
+                <input type="search" name="search" id="search" placeholder="Search for the orders...">
+            </form>
+        </header>
+        {% block body %}{% endblock body %}
+    </section>
+</body>
+</html>

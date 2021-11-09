@@ -1,9 +1,10 @@
 from django.forms.utils import pretty_name
 from django.shortcuts import redirect, render
-from .models import Address, Pizza, Orders, Profile
+from .models import Address, Contact, Pizza, Orders, Profile
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from .forms import ProfileForm
+from django.contrib.auth.models import AnonymousUser
 # Create your views here.
 def home(request):
     pizza = Pizza.objects.all()
@@ -13,13 +14,17 @@ def home(request):
     forth_last = pizza[len(pizza)-4]
     # Total Num Of Orders
     current_user = request.user
-    ordersOfCurrentUser = Orders.objects.filter(User=current_user)
-    totalOrdersList = []
-    for pizzaOrder in ordersOfCurrentUser:
-        quantity = pizzaOrder.quantity
-        totalOrdersList.append(quantity)
-    
-    totalOrders = sum(totalOrdersList)
+    if request.user and request.user != AnonymousUser():
+        ordersOfCurrentUser = Orders.objects.filter(User=current_user)
+        totalOrdersList = []
+        for pizzaOrder in ordersOfCurrentUser:
+            quantity = pizzaOrder.quantity
+            totalOrdersList.append(quantity)
+        
+        totalOrders = sum(totalOrdersList)
+    else:
+        totalOrders = 0
+        
 
     context = {
         'pizza': pizza,
@@ -27,7 +32,7 @@ def home(request):
         'second_last': second_last,
         'third_last':third_last,
         'forth_last':forth_last,
-        'totalOrders':totalOrders,
+        'totalOrders': totalOrders,
     }
     return render(request, "Home/index.html", context)
 
@@ -45,19 +50,26 @@ def orders(request):
 
     total_price = round(sum(price_list), 3)
     # Total Num Of Orders
-    current_user = request.user
-    ordersOfCurrentUser = Orders.objects.filter(User=current_user)
-    totalOrdersList = []
-    for pizzaOrder in ordersOfCurrentUser:
-        quantity = pizzaOrder.quantity
-        totalOrdersList.append(quantity)
+    if request.user and request.user != AnonymousUser():
+
+        current_user = request.user
+        ordersOfCurrentUser = Orders.objects.filter(User=current_user)
+        totalOrdersList = []
+        for pizzaOrder in ordersOfCurrentUser:
+            quantity = pizzaOrder.quantity
+            totalOrdersList.append(quantity)
+        
+        totalOrders = sum(totalOrdersList)
+        firstobjectofcurrentuser = ordersOfCurrentUser.first()
+    else:
+        totalOrders = 0
     
-    totalOrders = sum(totalOrdersList)
-    # print(totalOrders)
+
     context = {
         'order':order,
         'total_price':total_price,
         'totalOrders':totalOrders,
+        'firstobjectofcurrentuser':firstobjectofcurrentuser,
     }
     return render(request, "Home/orders.html", context)
 
@@ -100,58 +112,70 @@ def decreament(request):
             order.update(Pizza_price=pizzaPrice)
             return redirect("/orders/")
 
-                
-       
-
         
 def menu(request):
-    pizzas = Pizza.objects.all() 
-    current_username = request.user.username
-    user = User.objects.filter(username=current_username).first()
-    order = Orders.objects.filter(User=user)
-    # Total Num Of Orders
-    current_user = request.user
-    ordersOfCurrentUser = Orders.objects.filter(User=current_user)
-    totalOrdersList = []
-    for pizzaOrder in ordersOfCurrentUser:
-        quantity = pizzaOrder.quantity
-        totalOrdersList.append(quantity)
-    
-    totalOrders = sum(totalOrdersList)
-    context = {
-        'pizzas':pizzas,
-        'totalOrders':totalOrders,
-    }
-    # Taking Oreders
-    if request.method == 'POST':
-        sno = request.POST['sno']
-        pizza_ = Pizza.objects.filter(sno=sno).first()
-        p_name = pizza_.Pizza_name
-        p_desc = pizza_.Pizza_desc
-        p_price = pizza_.Pizza_price
-        
-        """to handle quantity in menu"""
-        allorders = Orders.objects.filter(User=request.user, Pizza_name=p_name)
-
-        if not allorders:
-            orders = Orders(Pizza_name=p_name, Pizza_desc=p_desc, Pizza_price=p_price, User = user)
-            orders.save()
-            return redirect("/menu/")
-        else:
-            order_ = Orders.objects.filter(User=request.user, Pizza_name=p_name)
-            order_quantity = order_.first().quantity
-            if order_quantity == 0:
-                order_.update(quantity=1)
-                return redirect("/menu/")
+    try:
+        if request.user:    
+            pizzas = Pizza.objects.all() 
+            current_username = request.user.username
+            user = User.objects.filter(username=current_username).first()
+            order = Orders.objects.filter(User=user)
+            # Total Num Of Orders
+            if request.user and request.user != AnonymousUser():
+                current_user = request.user
+                ordersOfCurrentUser = Orders.objects.filter(User=current_user)
+                totalOrdersList = []
+                for pizzaOrder in ordersOfCurrentUser:
+                    quantity = pizzaOrder.quantity
+                    totalOrdersList.append(quantity)
+                
+                totalOrders = sum(totalOrdersList)
             else:
-                order_quantity += 1
-                order_.update(quantity=order_quantity)
-                return redirect("/menu/")
+                totalOrders = 0
+            ordersOfCurrentUser = Orders.objects.filter(User=request.user)
+            firstobjectofcurrentuser = ordersOfCurrentUser.first()
+            context = {
+                'pizzas':pizzas,
+                'totalOrders':totalOrders,
+                'firstobjectofcurrentuser':firstobjectofcurrentuser,
+            }
+            # Taking Oreders
+            try:
+                if request.method == 'POST':
+                    sno = request.POST['sno']
+                    pizza_ = Pizza.objects.filter(sno=sno).first()
+                    p_name = pizza_.Pizza_name
+                    p_desc = pizza_.Pizza_desc
+                    p_price = pizza_.Pizza_price
+                    
+                    """to handle quantity in menu"""
+                    allorders = Orders.objects.filter(User=request.user, Pizza_name=p_name)
 
+                    if not allorders:
+                        orders = Orders(Pizza_name=p_name, Pizza_desc=p_desc, Pizza_price=p_price, User = user)
+                        orders.save()
+                        return redirect("/menu/")
+                    else:
+                        order_ = Orders.objects.filter(User=request.user, Pizza_name=p_name)
+                        order_quantity = order_.first().quantity
+                        if order_quantity == 0:
+                            order_.update(quantity=1)
+                            return redirect("/menu/")
+                        else:
+                            order_quantity += 1
+                            order_.update(quantity=order_quantity)
+                            return redirect("/menu/")
 
+            except Exception as e:
+                return redirect("/accounts/login/")
 
-    return render(request, "Home/menu.html", context)
-
+            return render(request, "Home/menu.html", context)
+        else:
+            # msg
+            return redirect("/accounts/login/")
+    except Exception:
+        # msg
+        return redirect("/accounts/login/")
 
 def signup(request):
     current_username = request.user.username
@@ -224,53 +248,64 @@ def logout(request):
         return redirect("/")
 
 def profile(request):
-    # Total no of orders by the logedin user
-    current_username = request.user.username
-    user = User.objects.filter(username=current_username).first()
-    order = Orders.objects.filter(User=user)
-    # total_pizzas = len(order)
-    # Total Num Of Orders
-    current_user = request.user
-    ordersOfCurrentUser = Orders.objects.filter(User=current_user)
-    totalOrdersList = []
-    for pizzaOrder in ordersOfCurrentUser:
-        quantity = pizzaOrder.quantity
-        totalOrdersList.append(quantity)
-    
-    totalOrders = sum(totalOrdersList)
-    # current user object
-    current_user = request.user
-    # Profile Image Upload and Update Handling
-    form = ProfileForm(instance=current_user)
-    if request.method == "POST":
-        profile_Image=request.FILES['profile_Image']
-        profile = Profile(User=current_user, profile_Image=profile_Image)
-        profile.save()
-    
+    try:
+        if request.user:
+            # Total no of orders by the logedin user
+            current_username = request.user.username
+            user = User.objects.filter(username=current_username).first()
+            order = Orders.objects.filter(User=user)
+            # total_pizzas = len(order)
+            # Total Num Of Orders
+            if request.user and request.user != AnonymousUser():
+                current_user = request.user
+                ordersOfCurrentUser = Orders.objects.filter(User=current_user)
+                totalOrdersList = []
+                for pizzaOrder in ordersOfCurrentUser:
+                    quantity = pizzaOrder.quantity
+                    totalOrdersList.append(quantity)
+                
+                totalOrders = sum(totalOrdersList)
+            else:
+                totalOrders = 0
+            # current user object
+            current_user = request.user
+            # Profile Image Upload and Update Handling
+            form = ProfileForm(instance=current_user)
+            if request.method == "POST":
+                try:
+                    profile_Image=request.FILES['profile_Image']
+                    profile = Profile(User=current_user, profile_Image=profile_Image)
+                    profile.save()
+                except Exception as e:
+                    return redirect("/profile/")
 
-    profile_objects = Profile.objects.filter(User=request.user)
-    if profile_objects:
-        profile_iamge_display = Profile.objects.filter(User=current_user).last()
-        profile_iamge_display_url = profile_iamge_display.profile_Image 
-    else:
-        profile_iamge_display_url = "images/defaultuser.png"
+            profile_objects = Profile.objects.filter(User=request.user)
+            if profile_objects:
+                profile_iamge_display = Profile.objects.filter(User=current_user).last()
+                profile_iamge_display_url = profile_iamge_display.profile_Image 
+            else:
+                profile_iamge_display_url = "images/defaultuser.png"
 
-    # Address show
-    address = Address.objects.filter(User = current_user).first()   
-    if address: 
-        address_display = address.address
-    else:
-        address_display = "No Address, Please Add!"
+            # Address show
+            address = Address.objects.filter(User = current_user).first()   
+            if address: 
+                address_display = address.address
+            else:
+                address_display = "No Address, Please Add!"
 
-    context = {
-        'profile_iamge_display_url':profile_iamge_display_url,
-        'form':form,
-        'totalOrders':totalOrders,
-        'address_display':address_display,
-    }
-            
-    return render(request, "Home/profile.html", context)
-
+            context = {
+                'profile_iamge_display_url':profile_iamge_display_url,
+                'form':form,
+                'totalOrders':totalOrders,
+                'address_display':address_display,
+            }
+                    
+            return render(request, "Home/profile.html", context)
+        else:
+            return redirect("/")
+    except Exception:
+        return redirect("/")
+        
 def address(request):
     # Address handling
     # current user object
@@ -310,3 +345,22 @@ def orderConfirmed(request):
         return redirect("/orders/")
         
 
+def contact(request):
+    try:
+        if request.user:
+            if request.method == "POST":
+                query_details = request.POST["query_details"]
+                if request.user and request.user != AnonymousUser(): 
+                    current_user = request.user
+                    contact = Contact(User=current_user, query=query_details)
+                    contact.save()
+                    # message
+                else:
+                    # message
+                    pass
+            return render(request, "Home/contact.html")
+        else:
+            return redirect("/accounts/login/")    
+    except Exception:
+        # message
+        return redirect("/accounts/login/")    

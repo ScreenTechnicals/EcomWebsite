@@ -1,0 +1,32 @@
+{% extends 'Supervisor/Supervisor.html' %}
+{% block body %}
+<div class="order__view">
+    <div class="view__order">
+        {% if orders %}
+            {% for order in orders %}
+                <div class="profile__order">
+                    <h1>{{order.User.username}} (username)</h1>
+                    <h1>{{order.User.email}} (email)</h1>
+                    {% for a in address %}
+                        {% if a.User.id == order.User.id %}
+                            <h1>{{a.address}} (address)</h1>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="order_details">
+                    <p>Pizza: {{order.Pizza_name}}</p>
+                    <p>Quantity: {{order.quantity}}</p>
+                    <p>Price: ${{order.Pizza_price}}</p>
+                </div>
+                <div class="dilivered">
+                    <form action="/order/{{order.id}}/" method="POST">
+                    {% csrf_token %}
+                        <input type="text" value="{{order.id}}" name="o_id" id="o_id" class="hidden-input">
+                        <button type="submit">Delivered</button>
+                    </form>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock body %}

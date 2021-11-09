@@ -14,5 +14,6 @@ urlpatterns = [
     path('orderConfirmed/', views.orderConfirmed, name="orderConfirmed"),
     path('increament/', views.increament, name="increament"),
     path('decreament/', views.decreament, name="decreament"),
+    path('contact/', views.contact, name="contact"),
 ]
 

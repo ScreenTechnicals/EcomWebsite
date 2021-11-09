@@ -1,0 +1,24 @@
+{% extends 'Supervisor/Supervisor.html' %}
+{% block body %}
+    <div class="contact__list">
+    <h1>Contact List</h1>
+        <div class="list">
+            <ul>
+            {% if contacts %}
+            {% for contact in contacts %}
+                <li>
+                    <a href="/contactlist/{{contact.id}}/">
+                        <p>{{forloop.counter}}.</p>
+                        <p>{{contact.User.username}}</p>
+                        <p>|</p>
+                        <p>{{contact.query|truncatechars:50}}</p>
+                    </a>
+                </li>
+            {% endfor %}
+            {% else %}
+                <h1>Nothing To Show !</h1>
+            {% endif %}
+            </ul>
+        </div>
+    </div>
+{% endblock body %}

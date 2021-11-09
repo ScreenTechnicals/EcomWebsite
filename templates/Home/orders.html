@@ -4,6 +4,7 @@
 {% block body %}
 <section id="orders">
 {% if order %}
+    {% if firstobjectofcurrentuser.order_confirmed == False %}
     <h1>Yor orders</h1>
     <div class="table__orders__container">
         <div class="table__orders">
@@ -64,6 +65,36 @@
         </form>
     </div>
     <h4>Please Pay on delivery !</h4>
+    {% else %}
+        <h1 class="confirmed_bill">Your Oeder Has Been confirmed Successfully <i class="fas fa-check"></i></h1>
+        <div class="bill_container">
+            <div class="bill_box">
+                <table>
+                    <tr>
+                        <th>Pizza Name</th>
+                        <th>Pizza Quantity</th>
+                        <th>Pizza Price</th>
+                    </tr>
+                    {% for pizza in order %}
+                    <tr>
+                        <td>{{pizza.Pizza_name}}</td>
+                        <td>{{pizza.quantity}}</td>
+                        <td>{{pizza.Pizza_price}}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td></td>
+                        <td>Your Total Price =</td>
+                        <td>${{total_price}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <form action="/deleteAllOrder/" method="POST">
+        {% csrf_token %}
+            <button class="cancel_all_order" type="submit"><i class="fas fa-times"></i> Cancel your order !</button>
+        </form>
+    {% endif %}
 {% else %}
 <h4>No Orders Yet ! Plesae Make At Least One <a href="/menu/">Order</a></h4>
 {% endif %}

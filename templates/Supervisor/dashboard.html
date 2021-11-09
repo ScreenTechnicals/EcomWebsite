@@ -1,0 +1,24 @@
+{% extends 'Supervisor/Supervisor.html' %}
+{% block body %}
+<div class="Allorders">
+    <div class="box__users">
+        <ul>
+        {% if allconfirmedorders %}
+        {% for order in allconfirmedorders %}
+            <li>
+                <a href="/order/{{order.id}}/">
+                    <p>{{forloop.counter}}.</p>
+                    <p>{{order.User}}</p>
+                    <p>{{order.User.email}}</p>
+                    <p>{{order.quantity}}</p>
+                    <p>{{order.Pizza_price}}</p>
+                </a>
+            </li>
+        {% endfor %}
+        {% else %}
+        <h1>No Orders Yet !</h1>
+        {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock body %}

@@ -190,7 +190,12 @@
         }
         #section__three .right__text{
             width: 50%;
+            height: 40vh;
             padding: 100px;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(138, 106, 106, 0.3)), url('./static/images/bg.webp');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
         }
         #section__three .right__text h1{
             margin: 20px 0;
@@ -205,12 +210,6 @@
         }
         #section__three .right__text p{
             color: rgb(255, 211, 130);
-        }
-        #section__three .right__text{
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(138, 106, 106, 0.3)), url('./static/images/bg.webp');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
         }
         #section__four{
             width: 100%;
@@ -425,6 +424,43 @@
             font-family: "Nothing You Could Do",cursive;
             font-size: 40px;
             text-decoration: underline;
+        }
+        #orders .confirmed_bill {
+            padding-bottom: 40px;
+        }
+        #orders .confirmed_bill i{
+            color: rgb(0, 255, 0);
+        }
+        #orders .bill_container{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #orders .bill_container .bill_box{
+            background: #f1f1f1;
+            color: #000;
+            padding: 20px;
+        }
+        #orders .bill_container .bill_box table{
+            border-collapse: collapse;
+            text-align: center;
+        }
+        #orders .bill_container .bill_box table td,#orders .bill_container .bill_box table th{
+            border: none;
+        }
+        .cancel_all_order{
+            background: red;
+            padding: 10px 30px;
+            color: #f1f1f1;
+            font-weight: bold;
+            font-size: 22px;
+            outline: none;
+            border: none;
+            border-radius: 30px;
+            font-family: 'Josefin Sans';
+            margin: 20px 0;
+            cursor: pointer;
         }
         #signup{
             width: 100%;
@@ -709,6 +745,96 @@
         #profile .address_upload .btn__address button:hover{
             background: red;
         }
+        #contact{
+            width: 100%;
+            min-height: 100vh;
+            background: rgb(47, 47, 47);
+            padding: 170px 0;
+        }
+        #contact h1{
+            color: rgb(255, 179, 0);
+            font-family: "Josefin Sans";
+            font-size: 40px;
+            font-weight: normal;
+            text-align: center;
+        }
+        #contact .form__contact{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+        #contact .form__contact form{
+            background: #fff;
+            padding: 30px;
+            width: 30%;
+        }
+        #contact .form__contact form div{
+            margin: 20px 0;
+        }
+        #contact .form__contact form div label{
+            display: block;
+            font-size: 22px;
+        }
+        #contact .form__contact form div input, #contact .form__contact form div textarea{
+            width: 100%;
+            outline: none;
+            padding: 5px;
+            font-size: 18px;
+        }
+        #contact .form__contact form div input{
+            border: none;
+            border-bottom: 1px solid #000;
+        }
+        #contact .form__contact form div textarea{
+            height: 100px;
+        }
+        #contact .form__contact form div input:focus{
+            border-bottom: 2px solid rgb(255, 211, 130);
+        }
+        #contact .form__contact form div textarea:focus{
+            border: 2px solid rgb(255, 211, 130);
+        }
+        #contact .form__contact form button{
+            background: orangered;
+            color: #fff;
+            width: 100%;
+            padding: 10px;
+            outline: none;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+        }
+        #section__four .card .pizza__content .price__order__btn__box .btn__none{
+            background: rgb(104, 104, 104) !important;
+            color: #000 !important;
+        }
+        #section__four .card .pizza__content .price__order__btn__box .btn__none:hover{
+            font-weight: normal !important;
+        }
+        #section__four .warning_no_order{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            color: #000;
+            padding: 30px;
+            display: none;
+        }
+        #section__four .warning_no_order .cross3{
+            width: 100%;
+            text-align: right;
+        }
+        #section__four .warning_no_order .cross3 i{
+            color: #000;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        #section__four .warning_no_order h1{
+            font-weight: normal;
+            font-family: "Josefin Sans";
+        }
     </style>
 </head>
 <body>
@@ -723,9 +849,8 @@
                 <ul>
                     <li><a href="/" class="nav__link {% block active1 %}{% endblock active1 %}">home</a></li>
                     <li><a href="/menu/" class="nav__link {% block active2 %}{% endblock active2 %}">menu</a></li>
-                    <li><a href="/">services</a></li>
                     <li><a href="/">about</a></li>
-                    <li><a href="/">contact</a></li>
+                    <li><a href="/contact/" {% block active4 %}{% endblock active4 %}>contact</a></li>
                     {% if user.is_authenticated %}
                         <li><a href="/profile/">Profile</a></li>
                         {% comment %} <form action="/accounts/logout/" method="POST">
@@ -756,26 +881,6 @@
         <footer class="footer">
 
         </footer>
-        <script>
-            const closeImageForm = document.querySelector('.closeImageForm');
-            const uploadImageForm = document.querySelector('.upload_image_form');
-            const imageContainer = document.querySelector('.image__container');
-            closeImageForm.addEventListener('click', function(){
-                uploadImageForm.style.display = "none";
-            });
-            imageContainer.addEventListener('click', function(){
-                uploadImageForm.style.display = "block";
-            });
-
-            const addressEdit = document.querySelector('.address_edit');
-            const addressUpload = document.querySelector('.address_upload');
-            const closeAddressForm = document.querySelector('.closeAddressForm');
-            addressEdit.addEventListener("click", function(){
-                addressUpload.style.display = "flex";
-            });
-            closeAddressForm.addEventListener("click", function(){
-                addressUpload.style.display = "none";
-            });
-        </script>
+<script src="{% static 'js/index.js' %}"></script>
 </body>
 </html>

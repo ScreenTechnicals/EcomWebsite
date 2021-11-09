@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.fields import SlugField
 # Create your models here.
 
 class Pizza(models.Model):
@@ -27,11 +28,20 @@ class Orders(models.Model):
 class Profile(models.Model):
     User = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     profile_Image = models.ImageField(upload_to="images", default="images/defaultuser.png", blank=True, null=True)
+    def __str__(self):
+        return self.User.username
     
 
 class Address(models.Model):
     User = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     address = models.TextField()
     def __str__(self):
-        return self.address
+        return self.User.username
+    
+
+class Contact(models.Model):
+    User = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    query = models.TextField()
+    def __str__(self):
+        return self.User.username
     

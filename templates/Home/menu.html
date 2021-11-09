@@ -19,11 +19,35 @@
                 <p>{{pizza.Pizza_desc}}</p>
                 <div class="price__order__btn__box">
                     <h4>"${{pizza.Pizza_price}}"</h4>
-                    <button type="submit">Order Now</button>
+                    {% if firstobjectofcurrentuser.order_confirmed == False or not firstobjectofcurrentuser%}
+                        <button type="submit">Order Now</button>
+                    {% else %}
+                        <button type="button" class="btn__none">Order Now</button>
+                    {% endif %}
                 </div>
             </div>
         </form>
     {% endfor %}
     </div>
+    <div class="warning_no_order">
+        <div class="cross3"><i class="fas fa-times closeMenuWarning"></i></div>
+        <h1>Your order is pending now !</h1>
+        <h1>After the deleviry of this pending order</h1>
+        <h1>You can go for another order !</h1>
+    </div>
 </section>
+
+<script>
+const btnNone = document.querySelectorAll(".btn__none");
+const closeMenuWarning = document.querySelector(".closeMenuWarning");
+const warningNoOrder = document.querySelector(".warning_no_order");
+btnNone.forEach(function(btn) {
+  btn.addEventListener("click", function() {
+    warningNoOrder.style.display = "block";
+  });
+});
+closeMenuWarning.addEventListener("click", function() {
+  warningNoOrder.style.display = "none";
+});
+</script>
 {% endblock body %}

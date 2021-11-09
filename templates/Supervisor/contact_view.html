@@ -1,0 +1,20 @@
+{% extends 'Supervisor/Supervisor.html' %}
+{% block body %}
+    <div class="contact_view">
+        <div class="view_contact">
+        {% for contact in contacts %}
+            <h2>{{contact.User.username}}(username)</h2>
+            <h3>{{contact.User.email}}(email)</h3>
+            <h4>Query:</h4>
+            <p>{{contact.query}}</p>
+            <div class="delete">
+                <form action="/contactlist/{{contact.id}}/" method="POST" class="delete__contact">
+                {% csrf_token %}
+                    <input type="text" value="{{contact.id}}" name="c_id" id="c_id" class="hidden-input">
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock body %}
