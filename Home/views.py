@@ -170,15 +170,15 @@ def menu(request):
                                 return redirect("/menu/")
 
             except Exception as e:
-                return redirect("/accounts/login/")
+                return redirect("/login/")
 
             return render(request, "Home/menu.html", context)
         else:
             # msg
-            return redirect("/accounts/login/")
+            return redirect("/login/")
     except Exception:
         messages.success(request, "Login To Continue!")
-        return redirect("/accounts/login/")
+        return redirect("/login/")
 
 def signup(request):
     current_username = request.user.username
@@ -365,7 +365,7 @@ def contact(request):
                     pass
             return render(request, "Home/contact.html")
         else:
-            return redirect("/accounts/login/")    
+            return redirect("/login/")    
     except Exception:
         # message
-        return redirect("/accounts/login/")    
+        return redirect("/login/")    

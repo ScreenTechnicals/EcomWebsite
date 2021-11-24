@@ -15,7 +15,7 @@
                 <h4>{% if request.user.first_name %}{{request.user.first_name}} {{request.user.last_name}} (Full Name){% endif %}</h4>
                 <h4>{% if request.user.username %}{{request.user.username}} (Username){% endif %}</h4>
                 <h4>{% if request.user.email %}{{request.user.email}} (Email){% endif %}</h4>
-                <form action="/accounts/logout/" method="POST">
+                <form action="/logout/" method="POST">
                 {% csrf_token %}
                     <button type="submit">Logout</button>
                 </form>
