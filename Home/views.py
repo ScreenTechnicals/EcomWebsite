@@ -170,15 +170,15 @@ def menu(request):
                                 return redirect("/menu/")
 
             except Exception as e:
-                return redirect("/login/")
+                return redirect("/log_in/")
 
             return render(request, "Home/menu.html", context)
         else:
             # msg
-            return redirect("/login/")
+            return redirect("/log_in/")
     except Exception:
         messages.success(request, "Login To Continue!")
-        return redirect("/login/")
+        return redirect("/log_in/")
 
 def signup(request):
     current_username = request.user.username
@@ -224,7 +224,7 @@ def signup(request):
 
     return render(request, "Home/signup.html", context)
     
-def login(request):
+def log_in(request):
     current_username = request.user.username
     user = User.objects.filter(username=current_username).first()
     order = Orders.objects.filter(User=user)
@@ -365,7 +365,7 @@ def contact(request):
                     pass
             return render(request, "Home/contact.html")
         else:
-            return redirect("/login/")    
+            return redirect("/log_in/")    
     except Exception:
         # message
-        return redirect("/login/")    
+        return redirect("/log_in/")    
