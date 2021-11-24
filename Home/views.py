@@ -1,4 +1,3 @@
-from django.forms.utils import pretty_name
 from django.shortcuts import redirect, render
 from .models import Address, Contact, Pizza, Orders, Profile
 from django.contrib.auth.models import User, auth
@@ -148,23 +147,27 @@ def menu(request):
                     p_desc = pizza_.Pizza_desc
                     p_price = pizza_.Pizza_price
                     
-                    """to handle quantity in menu"""
-                    allorders = Orders.objects.filter(User=request.user, Pizza_name=p_name)
-
-                    if not allorders:
-                        orders = Orders(Pizza_name=p_name, Pizza_desc=p_desc, Pizza_price=p_price, User = user)
-                        orders.save()
-                        return redirect("/menu/")
+                    if not Address.objects.filter(User=request.user):
+                        messages.success(request, "Please provide a address !")
+                        return redirect("/profile/")
                     else:
-                        order_ = Orders.objects.filter(User=request.user, Pizza_name=p_name)
-                        order_quantity = order_.first().quantity
-                        if order_quantity == 0:
-                            order_.update(quantity=1)
+                        """to handle quantity in menu"""
+                        allorders = Orders.objects.filter(User=request.user, Pizza_name=p_name)
+
+                        if not allorders:
+                            orders = Orders(Pizza_name=p_name, Pizza_desc=p_desc, Pizza_price=p_price, User = user)
+                            orders.save()
                             return redirect("/menu/")
                         else:
-                            order_quantity += 1
-                            order_.update(quantity=order_quantity)
-                            return redirect("/menu/")
+                            order_ = Orders.objects.filter(User=request.user, Pizza_name=p_name)
+                            order_quantity = order_.first().quantity
+                            if order_quantity == 0:
+                                order_.update(quantity=1)
+                                return redirect("/menu/")
+                            else:
+                                order_quantity += 1
+                                order_.update(quantity=order_quantity)
+                                return redirect("/menu/")
 
             except Exception as e:
                 return redirect("/accounts/login/")
@@ -174,7 +177,7 @@ def menu(request):
             # msg
             return redirect("/accounts/login/")
     except Exception:
-        # msg
+        messages.success(request, "Login To Continue!")
         return redirect("/accounts/login/")
 
 def signup(request):
@@ -315,8 +318,10 @@ def address(request):
         if not Address.objects.filter(User=current_user).first():    
             address = Address(User=current_user, address=address_)
             address.save()
+            messages.success(request, "Address Saved !")
         else:
             address = Address.objects.filter(User=current_user).update(address=address_)
+            messages.success(request, "Address Updated !")
             
         return redirect("/profile/")
 

@@ -835,9 +835,40 @@
             font-weight: normal;
             font-family: "Josefin Sans";
         }
+        .message__box{
+            width: 100%;
+            position: fixed;
+            /* margin: 100px 0; */
+            z-index: 99999;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 20px;
+        }
+        .message__box i{
+            font-size: 30px;
+            cursor: pointer;
+        }
+        .success{
+            background: rgb(0, 199, 0);
+            color: #fff;
+        }
+        .warning{
+            background: rgb(255, 72, 0);
+            color: #fff;
+        }
     </style>
 </head>
 <body>
+    <!-- message -->
+    {% if messages %}
+        {% for message in messages %}
+            <div {% if message.tags %} class="{{ message.tags }} message__box"{% endif %}>
+                <p>{{ message }}</p>
+                <div><i class="fas fa-times closeMessageDiv"></i></div>
+            </div>
+        {% endfor %}
+    {% endif %}
         <!-- Nav bar -->
         <header class="header">
             <div id="logo">
@@ -882,5 +913,6 @@
 
         </footer>
 <script src="{% static 'js/index.js' %}"></script>
+<script src="{% static 'js/messageBox.js' %}"></script>
 </body>
 </html>
