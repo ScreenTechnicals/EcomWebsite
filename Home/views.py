@@ -37,40 +37,45 @@ def home(request):
 
 
 def orders(request):
-    current_username = request.user.username
-    user = User.objects.filter(username=current_username).first()
-    order = Orders.objects.filter(User=user)
-    # print(order)
+    try:
+        current_username = request.user.username
+        user = User.objects.filter(username=current_username).first()
+        order = Orders.objects.filter(User=user)
+        # print(order)
 
-    price_list = []
-    for pizza in order:
-        price = pizza.Pizza_price
-        price_list.append(price)
+        price_list = []
+        for pizza in order:
+            price = pizza.Pizza_price
+            price_list.append(price)
 
-    total_price = round(sum(price_list), 3)
-    # Total Num Of Orders
-    if request.user and request.user != AnonymousUser():
+        total_price = round(sum(price_list), 3)
+        # Total Num Of Orders
+        if request.user and request.user != AnonymousUser():
 
-        current_user = request.user
-        ordersOfCurrentUser = Orders.objects.filter(User=current_user)
-        totalOrdersList = []
-        for pizzaOrder in ordersOfCurrentUser:
-            quantity = pizzaOrder.quantity
-            totalOrdersList.append(quantity)
+            current_user = request.user
+            ordersOfCurrentUser = Orders.objects.filter(User=current_user)
+            totalOrdersList = []
+            for pizzaOrder in ordersOfCurrentUser:
+                quantity = pizzaOrder.quantity
+                totalOrdersList.append(quantity)
+            
+            totalOrders = sum(totalOrdersList)
+            firstobjectofcurrentuser = ordersOfCurrentUser.first()
+        else:
+            totalOrders = 0
         
-        totalOrders = sum(totalOrdersList)
-        firstobjectofcurrentuser = ordersOfCurrentUser.first()
-    else:
-        totalOrders = 0
-    
 
-    context = {
-        'order':order,
-        'total_price':total_price,
-        'totalOrders':totalOrders,
-        'firstobjectofcurrentuser':firstobjectofcurrentuser,
-    }
-    return render(request, "Home/orders.html", context)
+        context = {
+            'order':order,
+            'total_price':total_price,
+            'totalOrders':totalOrders,
+            'firstobjectofcurrentuser':firstobjectofcurrentuser,
+        }
+        return render(request, "Home/orders.html", context)
+    except Exception:
+        messages.success(request, "Login To Continue!")
+        return redirect("/log_in/")
+
 
 def increament(request):
     if request.method == "POST":
@@ -175,6 +180,7 @@ def menu(request):
             return render(request, "Home/menu.html", context)
         else:
             # msg
+            messages.success(request, "Login To Continue!")
             return redirect("/log_in/")
     except Exception:
         messages.success(request, "Login To Continue!")
@@ -225,25 +231,29 @@ def signup(request):
     return render(request, "Home/signup.html", context)
     
 def log_in(request):
-    current_username = request.user.username
-    user = User.objects.filter(username=current_username).first()
-    order = Orders.objects.filter(User=user)
-    total_pizzas = len(order)
-    context = {
-        'total_pizzas':total_pizzas,
-    }
-    if request.method == "POST":
-        user_name_ = request.POST['user_name_']
-        pass_ = request.POST['pass_']
-        user_login = auth.authenticate(username=user_name_, password=pass_)
-        if user_login is not None:
-            auth.login(request, user_login)
-            messages.success(request, "Successfully Logged In !")
-            return redirect("/")
-        else:
-            messages.warning(request, "Sign up First")
+    if AnonymousUser():
+        current_username = request.user.username
+        user = User.objects.filter(username=current_username).first()
+        order = Orders.objects.filter(User=user)
+        total_pizzas = len(order)
+        context = {
+            'total_pizzas':total_pizzas,
+        }
+        if request.method == "POST":
+            user_name_ = request.POST['user_name_']
+            pass_ = request.POST['pass_']
+            user_login = auth.authenticate(username=user_name_, password=pass_)
+            if user_login is not None:
+                auth.login(request, user_login)
+                messages.success(request, "Successfully Logged In !")
+                return redirect("/")
+            else:
+                messages.warning(request, "Sign up First")
 
-    return render(request, "Home\login.html", context)
+        return render(request, "Home\login.html", context)
+    else:
+        messages.success(request, "You Are Loged In Already!")
+        return redirect("/")
 
 def logout(request):
     if request.method == "POST":
