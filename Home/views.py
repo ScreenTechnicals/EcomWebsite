@@ -250,7 +250,7 @@ def log_in(request):
             else:
                 messages.warning(request, "Sign up First")
 
-        return render(request, "Home\login.html", context)
+        return render(request, "Home/login.html", context)
     else:
         messages.success(request, "You Are Loged In Already!")
         return redirect("/")
